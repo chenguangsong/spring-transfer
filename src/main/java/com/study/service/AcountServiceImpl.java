@@ -30,7 +30,7 @@ public class AcountServiceImpl implements IAccountService{
         System.out.println(toAccount);
 
         dao.updateAccount(fromCardNo,fromAccount.getMoney() - money);
-        //double a = 1/0;
+        double a = 1/0;
         dao.updateAccount(toCardNo,toAccount.getMoney() + money);
 
         System.out.println("================转账后================");
