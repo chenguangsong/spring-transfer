@@ -8,7 +8,7 @@ import com.study.pojo.Account;
 
 /**
  * @ClassName AcountServiceImpl
- * @Description TODO
+ * @Description 转账业务类，赋值事务控制及业务处理
  * @Author chenguang
  * @Date 2020-05-05 16:56
  * @Version 1.0

@@ -1,6 +1,7 @@
 package com.study.ustils;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * @ClassName ConnectionUtils
@@ -11,13 +12,15 @@ import java.sql.Connection;
  **/
 public class ConnectionUtils {
 
+    //存放当前线程的Connection对象
     private static ThreadLocal<Connection> threadLocal = new ThreadLocal<Connection>();
 
+    //私有化构造器，禁止外部创建实例
     private ConnectionUtils(){}
 
-    public static synchronized  Connection getConnect() throws Exception{
+    public static synchronized  Connection getConnect() throws SQLException {
         if (threadLocal.get() == null){
-            Connection connection =DataSourceUtils.getDataSource().getConnection();
+            Connection connection =DataSourceUtils.getInstance().getConnection();
             threadLocal.set(connection);
         }
         return threadLocal.get();

@@ -9,16 +9,12 @@ import java.lang.reflect.Method;
 
 /**
  * @ClassName CGLibProxy
- * @Description TODO
+ * @Description cglib动态代理类，控制事务
  * @Author chenguang
  * @Date 2020-05-06 16:40
  * @Version 1.0
  **/
 public class CGLibProxy {
-
-
-
-
 
     /**
      * 使用cglib动态代理生成代理对象
@@ -31,13 +27,13 @@ public class CGLibProxy {
             public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
                 Object result = null;
                 try{
-                    ConnectionUtils.getConnect().setAutoCommit(false);
+                    TransactionManager.begin();
                     result = method.invoke(obj,objects);
-                    ConnectionUtils.getConnect().commit();
+                    TransactionManager.commit();
                 }catch (Exception e) {
                     e.printStackTrace();
                     // 抛出异常便于上层servlet捕获
-                    ConnectionUtils.getConnect().rollback();
+                    TransactionManager.rollBack();
                     throw e;
                 }
                 return result;

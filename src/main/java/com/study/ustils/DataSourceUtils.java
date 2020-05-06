@@ -11,16 +11,18 @@ import com.alibaba.druid.pool.DruidDataSource;
  **/
 public class DataSourceUtils {
 
-    //私有化构造函数，禁止外部创建
-    private DataSourceUtils(){};
+    private DataSourceUtils(){}
 
-    private static DruidDataSource dataSource = new DruidDataSource();
+    private static DruidDataSource druidDataSource = new DruidDataSource();
 
-    public  static DruidDataSource getDataSource (){
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql:///LAGOU_STUDY?useSSL=false");
-        dataSource.setUsername("root");
-        dataSource.setPassword("root@123");
-        return dataSource;
+    static {
+        druidDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        druidDataSource.setUrl("jdbc:mysql:///LAGOU_STUDY?useSSL=false");
+        druidDataSource.setUsername("root");
+        druidDataSource.setPassword("root@123");
+    }
+
+    public static DruidDataSource getInstance() {
+        return druidDataSource;
     }
 }
