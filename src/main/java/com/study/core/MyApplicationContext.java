@@ -33,6 +33,7 @@ public class MyApplicationContext {
     public MyApplicationContext(Class<?> configClass) throws IOException, ClassNotFoundException {
         if(configClass == null ){
             System.out.println("配置类不能为空……");
+            return;
         }
         doParse(configClass);
     }
@@ -46,15 +47,11 @@ public class MyApplicationContext {
     **/
     public void doParse(Class<?> configClass) throws IOException, ClassNotFoundException {
         ComponentScan componentScan = configClass.getAnnotation(ComponentScan.class);
-        if(componentScan == null){
-            System.out.println("ComponentScan is null,initialize failed……");
-            return;
+        String  path = "com.study";
+        if(componentScan != null && componentScan.value() != null && !"".equals(componentScan.value())){
+            path = componentScan.value();
         }
-        String packageName = componentScan.value();
-        if(null == packageName){
-            packageName = "com.study";
-        }
-        doScan(packageName);
+        doScan(path.split(","));
     }
 
 
@@ -65,10 +62,8 @@ public class MyApplicationContext {
     * @Param [strPath]
     * @return void
     **/
-    public void doScan(String strPath) throws ClassNotFoundException, IOException {
-        //自持多包扫描，循环遍历
-        String[]paths = strPath.split(",");
-        for (String packageName : paths) {
+    public void doScan(String[] packageNames) throws ClassNotFoundException, IOException {
+        for (String packageName : packageNames) {
             String s = packageName.replace(".","/");
             Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(s);
             while(urls.hasMoreElements()){
@@ -83,17 +78,10 @@ public class MyApplicationContext {
                             fileNames = file.list();
                         }
                         // fileNames : 包下包含的所有文件
-
                         for (String className : fileNames) {
                             //包名+文件名 = 类的全限定类名
                             className = packageName+"."+className.replace(".class","");
-                            Annotation serviceAnnotation = Class.forName(className).getAnnotation(Service.class);
-                            Annotation daoAnnotation = Class.forName(className).getAnnotation(Repository.class);
-                            // 只会实例话包含类Service或Repository注解的类
-                            if(serviceAnnotation != null || daoAnnotation != null){
-                                Object o =newInstance(className);
-                                contextMap.put(className,o);
-                            }
+                            newInstance(className);
                         }
                     }
                 }
@@ -103,12 +91,40 @@ public class MyApplicationContext {
 
     /**
     * @author chenguang
+    * @Description //根据全限定类名实例化Bean并存放到contextMap中
+    * @CreateDate 2020-05-06 23:18
+    * @Param [className]
+    * @return void
+    **/
+    public void newInstance(String className) throws ClassNotFoundException {
+        Annotation serviceAnnotation = getAnnotationByClassName(className,Service.class);
+        Annotation daoAnnotation = getAnnotationByClassName(className,Repository.class);
+        // 只会实例话包含类Service或Repository注解的类
+        if(serviceAnnotation != null || daoAnnotation != null){
+            Object o =doNewInstance(className);
+            contextMap.put(className,o);
+        }
+    }
+
+    /**
+     * @author chenguang
+     * @Description //根据className 全限定类名获取该类上的指定注解
+     * @CreateDate 2020-05-06 23:14
+     * @Param [className, annotationClass]
+     * @return java.lang.annotation.Annotation
+     **/
+    public Annotation getAnnotationByClassName(String className,Class annotationClass) throws ClassNotFoundException {
+        return Class.forName(className).getAnnotation(annotationClass);
+    }
+
+    /**
+    * @author chenguang
     * @Description //实例化Bean
     * @CreateDate 2020-05-06 20:38
     * @Param [className]
     * @return java.lang.Object
     **/
-    private Object newInstance(String className){
+    private Object doNewInstance(String className){
         if(className == null || "".equals(className)){
             System.out.println("实例话异常，className is null");
             return null;
@@ -162,6 +178,8 @@ public class MyApplicationContext {
         }
         return  null;
     }
+
+
 
     /**
     * @author chenguang

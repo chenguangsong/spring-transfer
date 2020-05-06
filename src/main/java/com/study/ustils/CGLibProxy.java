@@ -15,7 +15,6 @@ import java.lang.reflect.Method;
  * @Version 1.0
  **/
 public class CGLibProxy {
-
     /**
      * 使用cglib动态代理生成代理对象
      * @param obj 委托对象
@@ -40,5 +39,4 @@ public class CGLibProxy {
             }
         });
     }
-
 }

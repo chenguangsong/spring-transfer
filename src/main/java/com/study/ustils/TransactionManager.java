@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 /**
  * @ClassName TransactionManager
- * @Description TODO
+ * @Description 事务管理器
  * @Author chenguang
  * @Date 2020-05-06 20:52
  * @Version 1.0

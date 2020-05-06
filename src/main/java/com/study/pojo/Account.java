@@ -17,16 +17,8 @@ public class Account implements Serializable {
 
     private int money;
 
-    public String getUserId() {
-        return userId;
-    }
-
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getCardNo() {
-        return cardNo;
     }
 
     public void setCardNo(String cardNo) {

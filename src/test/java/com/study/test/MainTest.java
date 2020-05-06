@@ -24,5 +24,4 @@ public class MainTest {
         //3.执行转账操作
         service.updateAccount("200001","200002",100);
     }
-
 }

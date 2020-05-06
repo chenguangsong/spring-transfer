@@ -5,8 +5,8 @@ import java.sql.SQLException;
 
 /**
  * @ClassName ConnectionUtils
- * @Description TODO
- * @Author songchenguang
+ * @Description 数据库连接工具类
+ * @Author chenguang
  * @Date 2020-05-06 15:57
  * @Version 1.0
  **/
